@@ -14,10 +14,10 @@ import javax.swing.WindowConstants;
  */
 public class Main {
 
-	private final int boundaryX = 50;
-	private final int boundaryY = 50;
-	private final int boundaryWidth = 400;
-	private final int boundaryHeight = 400;
+	private final int boxX = 50;
+	private final int boxY = 50;
+	private final int boxWidth = 400;
+	private final int boxHeight = 400;
 
 	private List<Ball> balls = new ArrayList<Ball>();
 
@@ -26,12 +26,12 @@ public class Main {
 		JComponent panel = setupGUI();// this panel is what contains the paint component
 		while (true) {
 			panel.repaint();
-			this.update();
+			this.updateBalls();
 		}
 	}
 
 	/**
-	 * setups the gui.
+	 * Setups the gui.
 	 * 
 	 * @return the JComponent which is responsible for drawing the balls.
 	 */
@@ -39,14 +39,14 @@ public class Main {
 		JFrame frame = new JFrame();
 		JComponent panel = new JComponent() {
 			protected void paintComponent(Graphics g) {
-				g.drawRect(boundaryX - 2, boundaryY - 2, boundaryWidth + 3, boundaryHeight + 3);
-				g.clearRect(boundaryX - 1, boundaryY - 1, boundaryWidth + 2, boundaryHeight + 2);
+				g.drawRect(boxX - 2, boxY - 2, boxWidth + 3, boxHeight + 3);
+				g.clearRect(boxX - 1, boxY - 1, boxWidth + 2, boxHeight + 2);
 				for (Ball b : balls) {
 					b.drawNew(g);
 				}
 			}
 		};
-		frame.setSize(boundaryX * 3 + boundaryWidth, boundaryY * 3 + boundaryHeight);
+		frame.setSize(boxX * 3 + boxWidth, boxY * 3 + boxHeight);
 		frame.setTitle("Bouncing Balls");
 		frame.add(panel);
 		frame.setVisible(true);
@@ -122,7 +122,7 @@ public class Main {
 	/**
 	 * Sleeps for 0.003 seconds after updating
 	 */
-	public void update() {
+	public void updateBalls() {
 		for (Ball b : balls) {
 			b.move();
 			checkCollision(b);
@@ -146,13 +146,13 @@ public class Main {
 	}
 
 	public void touchingTopBotWalls(Ball b) {
-		if (b.y + b.radius >= boundaryHeight + boundaryY - 1 || b.y - b.radius <= boundaryY + 1) {
+		if (b.y + b.radius >= boxHeight + boxY - 1 || b.y - b.radius <= boxY + 1) {
 			b.yVelocity = -b.yVelocity;
 		}
 	}
 
 	public void touchingLeftRightWalls(Ball b) {
-		if (b.x - b.radius <= boundaryX + 1 || b.x + b.radius >= boundaryX + boundaryWidth - 1) {
+		if (b.x - b.radius <= boxX + 1 || b.x + b.radius >= boxX + boxWidth - 1) {
 			b.xVelocity = -b.xVelocity;
 		}
 	}
