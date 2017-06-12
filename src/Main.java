@@ -9,7 +9,7 @@ import javax.swing.WindowConstants;
 /**
  * Bouncing balls :)
  * 
- * @author tomo1_000
+ * @author Thomas Edwards
  *
  */
 public class Main {
@@ -27,7 +27,6 @@ public class Main {
 		while (true) {
 			panel.repaint();
 			this.update();
-			this.checkCollisions();
 		}
 	}
 
@@ -60,13 +59,13 @@ public class Main {
 	 * balls.
 	 */
 	public void addBalls() {
-		double rand = Math.random();
-		if (rand < 0.33)
-			addRandomBalls((int) (Math.random() * 15));
-		else if (rand < 0.66)
-			addVariedBalls();
-		else
-			addEvenBalls();
+		// double rand = Math.random();
+		// if (rand < 0.33)
+		// addRandomBalls((int) (Math.random() * 15));
+		// else if (rand < 0.66)
+		// addVariedBalls();
+		// else
+		addEvenBalls();
 	}
 
 	public void addRandomBalls(int amount) {
@@ -94,15 +93,15 @@ public class Main {
 	}
 
 	public void addEvenBalls() {
-		Ball b1 = new Ball(10, 15, 295, 230, 50, 300, Color.BLACK);
+		Ball b1 = new Ball(10, 15, 295, 330, 50, 300, Color.BLACK);
 		balls.add(b1);
 		Ball b2 = new Ball(10, 15, 250, 250, 300, 540, Color.RED);
 		balls.add(b2);
-		Ball b3 = new Ball(10, 15, 100, 150, 200, 300, Color.BLACK);
+		Ball b3 = new Ball(10, 15, 100, 170, 200, 300, Color.BLACK);
 		balls.add(b3);
 		Ball b4 = new Ball(10, 15, 100, 250, 400, 600, Color.RED);
 		balls.add(b4);
-		Ball b5 = new Ball(10, 15, 80, 90, -300, 650, Color.BLACK);
+		Ball b5 = new Ball(10, 15, 360, 90, -300, 650, Color.BLACK);
 		balls.add(b5);
 		Ball b6 = new Ball(10, 15, 200, 90, 300, -450, Color.RED);
 		balls.add(b6);
@@ -110,7 +109,7 @@ public class Main {
 		balls.add(b7);
 		Ball b8 = new Ball(10, 15, 300, 190, -300, -450, Color.RED);
 		balls.add(b8);
-		Ball b9 = new Ball(10, 15, 300, 90, -300, 50, Color.BLACK);
+		Ball b9 = new Ball(10, 15, 300, 150, -300, 50, Color.BLACK);
 		balls.add(b9);
 		Ball b10 = new Ball(10, 15, 200, 400, 300, -550, Color.RED);
 		balls.add(b10);
@@ -126,6 +125,7 @@ public class Main {
 	public void update() {
 		for (Ball b : balls) {
 			b.move();
+			checkCollision(b);
 		}
 		try {
 			Thread.sleep(3);
@@ -134,15 +134,14 @@ public class Main {
 		}
 	}
 
-	public void checkCollisions() {
-		for (int i = 0; i < balls.size(); i++) {
-			Ball b1 = balls.get(i);
-			this.touchingTopBotWalls(b1);
-			this.touchingLeftRightWalls(b1);
-			for (int j = i + 1; j < balls.size(); j++) {
-				Ball b2 = balls.get(j);
-				b1.compareBalls(b2);
-			}
+	public void checkCollision(Ball b1) {
+		this.touchingTopBotWalls(b1);
+		this.touchingLeftRightWalls(b1);
+		for (int j = 0; j < balls.size(); j++) {
+			Ball b2 = balls.get(j);
+			if (b1 == b2)
+				continue;
+			b1.compareBalls(b2);
 		}
 	}
 

@@ -37,14 +37,13 @@ public class Ball {
 		this.yVelocity = Math.random() * 400 + 50;
 		this.col = new Color((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256));
 		boolean algood = false;
-		while (!algood) {// ensures that a ball isnt overlapping with another ball
+		while (!algood) {// ensures that a ball isn't overlapping with another ball
 			this.x = Math.random() * 200 + 70 + radius / 2.2;
 			this.y = Math.random() * 200 + 70 + radius / 2.2;
 			int i = 0;
 			for (; i < balls.size(); i++) {
 				Ball b = balls.get(i);
 				if (touchingCircles(x, y, radius, b.x, b.y, b.radius)) {
-					i--;
 					break;
 				}
 			}
