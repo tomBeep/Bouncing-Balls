@@ -31,15 +31,15 @@ public class Ball {
 	 *            the list of balls which have already been added
 	 */
 	public Ball(List<Ball> balls) {
-		this.mass = Math.random() * 50;
-		this.radius = Math.random() * 20 + 10;
-		this.xVelocity = Math.random() * 400 + 50;
-		this.yVelocity = Math.random() * 400 + 50;
+		this.mass = Math.random() * 50 + 10;
+		this.radius = Math.random() * 12 + 10;
+		this.xVelocity = (Math.random()-0.5) * 1200;
+		this.yVelocity = (Math.random()-0.5) * 1200;
 		this.col = new Color((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256));
 		boolean algood = false;
 		while (!algood) {// ensures that a ball isn't overlapping with another ball
-			this.x = Math.random() * 200 + 70 + radius / 2.2;
-			this.y = Math.random() * 200 + 70 + radius / 2.2;
+			this.x = Math.random() * 330 + 70 + radius / 2.2;
+			this.y = Math.random() * 330 + 70 + radius / 2.2;
 			int i = 0;
 			for (; i < balls.size(); i++) {
 				Ball b = balls.get(i);
@@ -63,6 +63,7 @@ public class Ball {
 		x += xMovement;
 		y += yMovement;
 	}
+
 
 	/**
 	 * Checks whether this ball is touching the other ball, if it is then it changes the celocities of both balls to
@@ -88,7 +89,8 @@ public class Ball {
 			this.yVelocity = ballyVel1;
 			b.xVelocity = ballxVel2;
 			b.yVelocity = ballyVel2;
-
+			//b.move();
+			//this.move();
 		}
 	}
 
@@ -106,6 +108,10 @@ public class Ball {
 		double xDistance = Math.abs(x1 - x2);// x distance between centers
 		double yDistance = Math.abs(y1 - y2);// y distance between centers
 		return (Math.hypot(xDistance, yDistance) <= rad1 + rad2);
+	}
+
+	public boolean touchingBalls(Ball b1, Ball b2) {
+		return touchingCircles(b1.x, b1.y, b1.radius, b2.x, b2.y, b2.radius);
 	}
 
 }
