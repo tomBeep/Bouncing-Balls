@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +31,10 @@ public class Main {
 	private boolean gravity = false;
 
 	public Main() {
-		addBalls();
-		JComponent panel = setupGUI();// this panel is what contains the paint component
+		addStartingBalls();
+		JComponent drawingPane = setupGUI();
 		while (true) {
-			panel.repaint();
+			drawingPane.repaint();
 			this.updateBalls();
 		}
 	}
@@ -45,7 +47,8 @@ public class Main {
 	public JComponent setupGUI() {
 		JFrame frame = new JFrame();
 		// Graphics Panel
-		JComponent panel = new JComponent() {
+		@SuppressWarnings("serial")
+		JComponent drawingPane = new JComponent() {
 			protected void paintComponent(Graphics g) {
 				g.drawRect(boxX - 2, boxY - 2, boxWidth + 4, boxHeight + 4);
 				g.clearRect(boxX - 1, boxY - 1, boxWidth + 2, boxHeight + 2);
@@ -56,44 +59,43 @@ public class Main {
 		};
 
 		// Buttons
-		JComponent buttons = new JPanel();
-		JButton add = new JButton("Add Ball");
-		add.addActionListener((e) -> addBall());
-		buttons.add(add);
-		add.setFocusable(false);
-
-		JButton gravity = new JButton("Gravity");
-		gravity.addActionListener((e) -> {
+		JComponent buttonPanel = new JPanel();
+		addButton(buttonPanel, "Add Ball", (e) -> addBall());
+		addButton(buttonPanel, "Gravity", (e) -> {
 			toggleGravity();
-			switchGravityBackground(gravity);
+			switchGravityBackground((JButton) buttonPanel.getComponent(1));
 		});
-		gravity.setBackground(Color.orange);
-		buttons.add(gravity);
-		gravity.setFocusable(false);
+		buttonPanel.getComponent(1).setBackground(Color.orange);
+		addButton(buttonPanel, "Remove Ball", (e) -> removeBall());
+		addButton(buttonPanel, "Print Balls", (e) -> printBalls());
 
-		JButton remove = new JButton("Remove Ball");
-		remove.addActionListener((e) -> removeBall());
-		buttons.add(remove);
-		remove.setFocusable(false);
-
-		buttons.setBackground(Color.gray);
-		buttons.setBorder(new LineBorder(Color.BLACK, 2));
+		buttonPanel.setBackground(Color.gray);
+		buttonPanel.setBorder(new LineBorder(Color.BLACK, 2));
 
 		// Frame
-		frame.add(buttons, BorderLayout.PAGE_END);
-		frame.add(panel, BorderLayout.CENTER);
+		frame.add(buttonPanel, BorderLayout.PAGE_END);
+		frame.add(drawingPane, BorderLayout.CENTER);
 		frame.setSize(boxX * 2 + 18 + boxWidth, boxY * 2 + 8 + boxHeight + 80);// +100 for the buttons
 		frame.setResizable(false);
 		frame.setTitle("Bouncing Balls");
+		drawingPane.setBackground(Color.blue);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		return panel;
+		return drawingPane;
+	}
+
+	private void addButton(JComponent buttonPanel, String name, ActionListener action) {
+		JButton button = new JButton(name);
+		button.addActionListener(action);
+		button.setFocusable(false);
+		button.setPreferredSize(new Dimension(120, 30));
+		buttonPanel.add(button);
 	}
 
 	/**
 	 * Adds the inital balls, which adds according to the even balls() method.
 	 */
-	public void addBalls() {
+	public void addStartingBalls() {
 		addEvenBalls();
 	}
 
@@ -164,11 +166,6 @@ public class Main {
 		}
 	}
 
-	public boolean touchingBotWall(Ball b) {
-		return (b.y + b.radius >= boxHeight + boxY - 1);
-
-	}
-
 	public void touchingTopBotWalls(Ball b) {
 		if (b.y + b.radius >= boxHeight + boxY - 1 || b.y - b.radius <= boxY + 1) {
 			b.yVelocity = -b.yVelocity;
@@ -230,6 +227,15 @@ public class Main {
 		balls.add(b11);
 		Ball b12 = new Ball(10, 15, 100, 400, 700, -450, Color.RED);
 		balls.add(b12);
+	}
+
+	/**
+	 * Prints out each ball's position using a stream to do it. Just for practice using streams for exam.
+	 */
+	public void printBalls() {
+		balls.stream().sorted((Ball b1, Ball b2) -> {
+			return (int) (b1.x - b2.x);
+		}).forEach(b -> System.out.printf("Ball:\t%.1f\t%.1f\t%.1f\n", Math.hypot(b.xVelocity, b.yVelocity), b.x, b.y));
 	}
 
 	public static void main(String[] args) {
