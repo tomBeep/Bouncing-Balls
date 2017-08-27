@@ -56,8 +56,8 @@ public class Ball {
 	 * Called every 0.003 seconds, moves the position of the balls 0.001 of their speed in the correct direction
 	 */
 	public void move() {
-		double yMovement = yVelocity * 0.003;
-		double xMovement = xVelocity * 0.003;
+		double yMovement = yVelocity * 0.0065;
+		double xMovement = xVelocity * 0.0065;
 		oldX = x;
 		oldY = y;
 		x += xMovement;

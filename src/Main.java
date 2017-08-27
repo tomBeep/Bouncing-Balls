@@ -36,7 +36,7 @@ public class Main {
 		addStartingBalls();
 		JComponent drawingPane = setupGUI();
 		Timer t1 = new Timer(20, e -> drawingPane.repaint());// updates panes 50 times per second
-		Timer t2 = new Timer(10, e -> updateBalls());// updates balls 50 times per second
+		Timer t2 = new Timer(20, e -> updateBalls());// updates balls 50 times per second
 
 		t1.start();
 		t2.start();
@@ -147,11 +147,6 @@ public class Main {
 			} catch (java.util.ConcurrentModificationException e) {
 				continue;// happens occasionally if you add a ball while iterating
 			}
-		}
-		try {
-			Thread.sleep(3);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 
