@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 
@@ -34,10 +35,11 @@ public class Main {
 	public Main() {
 		addStartingBalls();
 		JComponent drawingPane = setupGUI();
-		while (true) {
-			drawingPane.repaint();
-			this.updateBalls();
-		}
+		Timer t1 = new Timer(20, e -> drawingPane.repaint());// updates panes 50 times per second
+		Timer t2 = new Timer(10, e -> updateBalls());// updates balls 50 times per second
+
+		t1.start();
+		t2.start();
 	}
 
 	/**
